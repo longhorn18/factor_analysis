@@ -1,5 +1,4 @@
 import pandas as pd
-import pdfkit
 
 
 def monthly_transform(df, start_month, end_month, model):
@@ -31,30 +30,6 @@ def get_df_by_dates(df, start_date, end_date, model):
     return df[(df.DataDate >= start_date) & (df.DataDate <= end_date) & (df.Model == model)]
 
 
-def df_to_html(df):
-    html = df.round(4).style.background_gradient(cmap='RdBu').set_table_styles([{'selector': 'th', 'props': [('font-size', '7pt')]}]).set_properties(**{'width': '260px'}, **{'font-size': '7pt'}, **{'text-align': 'right'}).render()
-    return html
-
-
-def html_to_pdf(html, pdfname):
-    path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-    config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
-    options = {
-            'dpi': 365,
-            'page-size': 'A4',
-            'margin-top': '0.5in',
-            'margin-right': '0.3in',
-            'margin-bottom': '0.25in',
-            'margin-left': '0.3in',
-            'encoding': "UTF-8",
-            'custom-header': [
-                ('Accept-Encoding', 'gzip')
-            ],
-            'no-outline': None,
-        }
-    pdfkit.from_string(html, pdfname, configuration=config, options=options)
-
-
 def total_return_from_returns(returns):
     """Retuns the return between the first and last value of the DataFrame.
     Parameters
@@ -79,6 +54,5 @@ def factor_by_month(df, fac_col, return_col, date_col, func):
     return df[[fac_col, return_col, 'YearMonth']].pivot_table(index='Factor', columns=['YearMonth'], aggfunc=func)
 
 
-def df_to_pdf(df, pdf_name):
-    html_to_pdf(df_to_html(df), pdf_name)
+
 
