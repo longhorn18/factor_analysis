@@ -1,4 +1,7 @@
 import pdfkit
+from datetime import date
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 
 def df_to_html(df):
@@ -28,4 +31,25 @@ def html_to_pdf(html, pdfname):
 def df_to_pdf(df, pdf_name):
     html_to_pdf(df_to_html(df), pdf_name)
 
+
+def get_dates_from_week_back(num_of_week):
+    today = date.today()
+    end_date = today - timedelta(days=(today.weekday() - 4) % 7)
+    start_date = end_date - timedelta(days=7*num_of_week-3)
+    return start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')
+
+
+def get_dates_from_month_back(num_of_month):
+    d = date.today()
+    end_date = date(d.year, d.month, 1) - timedelta(days=1)
+    start_date = date(d.year, d.month, 1) - relativedelta(months=num_of_month)
+    return start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')
+
+
+def year_month_format(date_list):
+    return date_list.map(lambda d: d.strftime('%b-%Y'))
+
+
+def year_week_format(num_of_weeks):
+    return [str(d) + ' Week' for d in list(range((-1)*num_of_weeks, 0))]
 
