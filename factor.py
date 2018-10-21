@@ -45,14 +45,13 @@ def total_return_from_returns(returns):
 
 def factor_by_year(df, fac_col, return_col, date_col, func):
     df['Year'] = df[date_col].dt.year
-    return df[[fac_col, return_col, 'Year']].pivot_table(index=fac_col, columns=['Year'], aggfunc=func)
+    df_out = df[[fac_col, return_col, 'Year']].pivot_table(index=fac_col, columns=['Year'], aggfunc=func)
+    df_out.columns = df_out.columns.droplevel(0)
+    return df_out
 
 
-def factor_by_month(df, fac_col, return_col, date_col, func):
-    df['YearMonth'] = pd.to_datetime(df[date_col]).map(lambda dt: dt.replace(day=1)).map(
-        lambda d: d.strftime('%b-%Y'))
-    return df[[fac_col, return_col, 'YearMonth']].pivot_table(index='Factor', columns=['YearMonth'], aggfunc=func)
-
-
-
-
+def factor_by_yearmonth(df, fac_col, return_col, date_col, func):
+    df['YearMonth'] = pd.to_datetime(df[date_col]).map(lambda dt: dt.replace(day=1))
+    df_out = df[[fac_col, return_col, 'YearMonth']].pivot_table(index='Factor', columns=['YearMonth'], aggfunc=func)
+    df_out.columns = df_out.columns.droplevel(0)
+    return df_out

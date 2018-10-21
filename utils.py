@@ -27,3 +27,7 @@ def html_to_pdf(html, pdfname):
 
 def df_to_pdf(df, pdf_name):
     html_to_pdf(df_to_html(df), pdf_name)
+
+
+def yearmonth_format(date_list):
+    return date_list.map(lambda d: d.strftime('%b-%Y'))
