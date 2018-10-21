@@ -9,7 +9,7 @@ def df_to_html(df):
     return html
 
 
-def html_to_pdf(html, pdfname):
+def html_to_pdf(html, footer, pdfname):
     path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
     config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
     options = {
@@ -23,13 +23,16 @@ def html_to_pdf(html, pdfname):
             'custom-header': [
                 ('Accept-Encoding', 'gzip')
             ],
+            'footer-left': footer,
+            'footer-font-size': '5',
+            'footer-right': '[page] of [topage]',
             'no-outline': None,
         }
     pdfkit.from_string(html, pdfname, configuration=config, options=options)
 
 
-def df_to_pdf(df, pdf_name):
-    html_to_pdf(df_to_html(df), pdf_name)
+def df_to_pdf(df, footer, pdf_name):
+    html_to_pdf(df_to_html(df), footer, pdf_name)
 
 
 def get_dates_from_week_back(num_of_week):
@@ -44,6 +47,15 @@ def get_dates_from_month_back(num_of_month):
     end_date = date(d.year, d.month, 1) - timedelta(days=1)
     start_date = date(d.year, d.month, 1) - relativedelta(months=num_of_month)
     return start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')
+
+
+def get_dates_from_period_back(num_of_periods, period):
+    if period == 'M':
+        return get_dates_from_month_back(num_of_periods)
+    elif period == 'W':
+        return get_dates_from_week_back(num_of_periods)
+    else:
+        return None
 
 
 def year_month_format(date_list):
