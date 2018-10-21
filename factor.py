@@ -50,8 +50,19 @@ def factor_by_year(df, fac_col, return_col, date_col, func):
     return df_out
 
 
-def factor_by_yearmonth(df, fac_col, return_col, date_col, func):
+def factor_by_year_month(df, fac_col, return_col, date_col, func):
     df['YearMonth'] = pd.to_datetime(df[date_col]).map(lambda dt: dt.replace(day=1))
     df_out = df[[fac_col, return_col, 'YearMonth']].pivot_table(index='Factor', columns=['YearMonth'], aggfunc=func)
     df_out.columns = df_out.columns.droplevel(0)
     return df_out
+
+
+def factor_by_year_week(df, fac_col, return_col, date_col, func):
+    df['YearWeek'] = pd.to_datetime(df[date_col]).dt.strftime('%Y-%U')
+    df_out = df[[fac_col, return_col, 'YearWeek']].pivot_table(index='Factor', columns=['YearWeek'], aggfunc=func)
+    df_out.columns = df_out.columns.droplevel(0)
+    return df_out
+
+
+def year_month_format(date_list):
+    return date_list.map(lambda d: d.strftime('%b-%Y'))
