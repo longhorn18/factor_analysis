@@ -25,7 +25,7 @@ def html_to_pdf(html, footer, pdfname):
             ],
             'footer-left': footer,
             'footer-font-size': '5',
-            'footer-right': '[page] of [topage]',
+            # 'footer-right': '[page] of [topage]',
             'no-outline': None,
         }
     pdfkit.from_string(html, pdfname, configuration=config, options=options)
@@ -64,4 +64,3 @@ def year_month_format(date_list):
 
 def year_week_format(num_of_weeks):
     return [str(d) + ' Week' for d in list(range((-1)*num_of_weeks, 0))]
-
